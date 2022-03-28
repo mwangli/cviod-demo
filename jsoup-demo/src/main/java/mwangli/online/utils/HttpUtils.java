@@ -73,7 +73,8 @@ public class HttpUtils {
     }
 
     public static void main(String[] args) {
-        String html = HttpUtils.getHtml("http://www.itcast.cn/?username=xx");
+//        String html = HttpUtils.getHtml("http://www.itcast.cn/?username=xx");
+        String html = HttpUtils.getHtml("https://ncov.dxy.cn/ncovh5/view/pneumonia");
         System.out.println(html);
     }
 }
