@@ -5,6 +5,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+import java.util.List;
+
 /**
  * @author mwangli
  * @date 2022/3/28 10:56
@@ -25,6 +27,7 @@ public class CovidDTO {
     private String locationId;
     private String pid;
     private String statisticsData;
+    private List<CovidDTO> statisticsDataList;
     private String highDangerCount;
     private String midDangerCount;
     private String detectOrgCount;
@@ -34,4 +37,5 @@ public class CovidDTO {
     private String cityName;
     private String currentConfirmedCountStr;
     private String datetime;
+    private String dateId;
 }
