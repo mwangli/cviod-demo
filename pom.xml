@@ -11,6 +11,7 @@
     <modules>
         <module>jsoup-demo</module>
         <module>data-demo</module>
+        <module>saprk-demo</module>
     </modules>
 
     <properties>

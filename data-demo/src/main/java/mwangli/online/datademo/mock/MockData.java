@@ -1,9 +1,14 @@
 package mwangli.online.datademo.mock;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import com.alibaba.fastjson.JSON;
+import mwangli.online.datademo.bean.ItemDTO;
+import org.junit.Test;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+
+import javax.annotation.Resource;
+import java.util.Random;
 
 /**
  * @author mwangli
@@ -12,11 +17,26 @@ import org.springframework.stereotype.Component;
 @Component
 public class MockData {
 
-    @Autowired
+    @Resource
     private KafkaTemplate<String, String> kafkaTemplate;
 
-    @Scheduled(cron = "0 0/10 * * * ?")
-    public void mock() {
+    private String[] itemName = new String[]{"N95口罩/个", "医用外科口罩/个", "84消毒液/瓶", "无接触测温枪/个", "一次性手套/副", "护目镜/副", "医用防护服/套"};
+    private String[] itemFrom = new String[]{"采购", "下拨", "捐赠", "消耗", "需求"};
 
+    @Test
+    @Scheduled(cron = "0/10 * * * * ?")
+    public void mock() {
+        // 1.模拟生成物资数据
+        Random random = new Random();
+        for (int i = 0; i < 10; i++) {
+            ItemDTO itemDTO = new ItemDTO();
+            itemDTO.setName(itemName[random.nextInt(itemName.length)]);
+            itemDTO.setFrom(itemFrom[random.nextInt(itemFrom.length)]);
+            itemDTO.setCount(random.nextInt(1000));
+            // 2.将数据发送至Kafka
+            kafkaTemplate.send("item_data", JSON.toJSONString(itemDTO));
+        }
     }
+
+
 }

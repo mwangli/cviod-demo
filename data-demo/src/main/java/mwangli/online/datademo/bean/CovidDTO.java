@@ -18,11 +18,11 @@ import java.util.List;
 public class CovidDTO {
     private String provinceName;
     private String provinceShortName;
-    private String currentConfirmedCount;
-    private String confirmedCount;
-    private String suspectedCount;
-    private String curedCount;
-    private String deadCount;
+    private Integer currentConfirmedCount;
+    private Integer confirmedCount;
+    private Integer suspectedCount;
+    private Integer curedCount;
+    private Integer deadCount;
     private String comment;
     private String locationId;
     private String pid;
@@ -36,6 +36,5 @@ public class CovidDTO {
     private String dangerAreas;
     private String cityName;
     private String currentConfirmedCountStr;
-    private String datetime;
     private String dateId;
 }
