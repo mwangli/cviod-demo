@@ -10,7 +10,7 @@ import mwangli.online.utils.HttpUtils;
 public class test {
 
     public static void main(String[] args) {
-        String html = HttpUtils.getHtml();
+//        String html = HttpUtils.getHtml();
     }
 
 }
