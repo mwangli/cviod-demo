@@ -54,9 +54,14 @@ object ItemDataProcess {
       KafkaUtils.createDirectStream[String, String](ssc, LocationStrategies.PreferConsistent,
         ConsumerStrategies.Subscribe[String, String](topics, config))
     }
-    // 提交偏移量
-    //    val offsets = kafkaDS.asInstanceOf[HasOffsetRanges].offsetRanges
-    //    OffsetUtils.saveOffsets(groupId, offsets)
+    kafkaDS.foreachRDD(rdd => {
+      if (rdd.count > 0) {
+        // 提交偏移量
+        val offsets = rdd.asInstanceOf[HasOffsetRanges].offsetRanges
+        OffsetUtils.saveOffsets(groupId, offsets)
+      }
+    })
+
     // 4.处理实时数据
     // {"count":289,"from":"下拨","name":"N95口罩/个"}
     // =>(N95口罩/个,(采购500,下拨0,捐赠0,消耗0,需求0,库存500))
@@ -119,7 +124,7 @@ object ItemDataProcess {
       rdd.foreach(data => {
         val connection = DriverManager.getConnection("jdbc:mysql://112.74.187.216:3306/bigdata?characterEncoding=UTF-8&useSSL=false", "root", "Root.123456")
         // 2.编写SQL
-        val sql = "insert into item_data values(?,?,?,?,?,?,?,?)"
+        val sql = "replace into item_data values(?,?,?,?,?,?,?,?)"
         // 3.创建预编译语句
         val statement = connection.prepareStatement(sql)
         // 4.设置执行参数
