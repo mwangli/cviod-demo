@@ -14,7 +14,7 @@ object OffsetUtils {
   // 从mysql中获取偏移量
   def getOffsetMap(groupId: String, topic: String): Map[TopicPartition, Long] = {
     // 1.加载驱动获取链接
-    val connection = DriverManager.getConnection("jdbc:mysql://112.74.187.216:3306/bigdata?characterEncoding=UTF-8","root","Root.123456")
+    val connection = DriverManager.getConnection("jdbc:mysql://112.74.187.216:3306/bigdata?characterEncoding=UTF-8&useSSL=false","root","Root.123456")
     // 2.编写SQL
     val sql = "select `partition`,offset from t_offset where group_id = ? and topic = ?"
     // 3.创建预编译语句
@@ -41,7 +41,7 @@ object OffsetUtils {
   // 手动提交偏移量到mysql
   def saveOffsets(groupId: String, offsets: Array[OffsetRange]) = {
     // 1.加载驱动获取链接
-    val connection = DriverManager.getConnection("jdbc:mysql://112.74.187.216:3306/bigdata?characterEncoding=UTF-8","root","Root.123456")
+    val connection = DriverManager.getConnection("jdbc:mysql://112.74.187.216:3306/bigdata?characterEncoding=UTF-8&useSSL=false","root","Root.123456")
     // 2.编写SQL
     val sql = "replace into t_offset(topic,`partition`,group_id,offset) values(?,?,?,?)"
     // 3.创建预编译语句
