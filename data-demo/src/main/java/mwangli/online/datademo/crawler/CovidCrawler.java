@@ -41,7 +41,7 @@ public class CovidCrawler {
     private KafkaTemplate<String, String> kafkaTemplate;
 
     @Test
-    @Scheduled(cron = " 0 0 8 * * ?")
+//    @Scheduled(cron = " 0 0 8 * * ?")
     public void crawlCovidData() {
         // 1.请求指定页面
         String html = HttpUtils.getHtml("https://ncov.dxy.cn/ncovh5/view/pneumonia");
