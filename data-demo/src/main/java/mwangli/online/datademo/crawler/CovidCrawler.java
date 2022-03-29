@@ -33,8 +33,8 @@ import java.util.regex.Pattern;
  */
 @Slf4j
 @Component
+@SpringBootTest
 @RunWith(SpringRunner.class)
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class CovidCrawler {
 
     @Autowired

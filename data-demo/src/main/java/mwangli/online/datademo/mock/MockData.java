@@ -3,11 +3,14 @@ package mwangli.online.datademo.mock;
 import com.alibaba.fastjson.JSON;
 import mwangli.online.datademo.bean.ItemDTO;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+import org.springframework.test.context.junit4.SpringRunner;
 
-import javax.annotation.Resource;
 import java.util.Random;
 
 /**
@@ -15,9 +18,11 @@ import java.util.Random;
  * @date 2022/3/28 18:47
  */
 @Component
+@SpringBootTest
+@RunWith(SpringRunner.class)
 public class MockData {
 
-    @Resource
+    @Autowired
     private KafkaTemplate<String, String> kafkaTemplate;
 
     private String[] itemName = new String[]{"N95口罩/个", "医用外科口罩/个", "84消毒液/瓶", "无接触测温枪/个", "一次性手套/副", "护目镜/副", "医用防护服/套"};
