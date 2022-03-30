@@ -19,7 +19,7 @@ import org.apache.spark.{SparkConf, SparkContext}
 import java.sql.DriverManager
 import java.util.Date
 
-object ItemDataProcess {
+object ItemDataProcessJob {
 
   def main(args: Array[String]): Unit = {
     // 1.准备环境
@@ -29,7 +29,7 @@ object ItemDataProcess {
     val sc = new SparkContext(conf)
     sc.setLogLevel("WARN")
     val ssc = new StreamingContext(sc, Seconds(5))
-    ssc.checkpoint("./ssc_check_point")
+    ssc.checkpoint("D:\\ssc_check_point")
     val groupId = "sparkKafka"
     val topic = "item_data"
     // 2.Kafka配置
