@@ -1,5 +1,7 @@
 package mwang.online.job
 
+import com.alibaba.fastjson.JSON
+import mwang.online.bean.CovidDTO
 import org.apache.spark.sql.streaming.Trigger
 import org.apache.spark.{SparkConf, SparkContext}
 import org.apache.spark.sql.{DataFrame, Dataset, SparkSession}
@@ -23,9 +25,14 @@ object CovidDataProcessJob {
       .option("subscribe", "city_data").load()
     // 2.处理数据
     val jsonStrDS: Dataset[String] = kafkaDF.selectExpr("CAST(value as STRING)").as[String]
-    jsonStrDS.writeStream.format("console").outputMode("append")
-      .trigger(Trigger.ProcessingTime(0)).option("truncate", value = false)
-      .start().awaitTermination()
+    //    jsonStrDS.writeStream.format("console").outputMode("append")
+    //      .trigger(Trigger.ProcessingTime(0)).option("truncate", value = false)
+    //      .start().awaitTermination()
+    val covidDS = jsonStrDS.map(json => {
+      JSON.parseObject(json, classOf[CovidDTO])
+    })
+    // 获取省份数据
+    covidDS.filter((city)==>)
     // 3.聚合数据
     // 3.保存结果
   }

@@ -42,6 +42,7 @@ public class CovidCrawler {
 
     @Test
 //    @Scheduled(cron = " 0 0 8 * * ?")
+    @Scheduled(initialDelay = 1000, fixedDelay = 1000 * 60 * 60 * 24)
     public void crawlCovidData() {
         // 1.请求指定页面
         String html = HttpUtils.getHtml("https://ncov.dxy.cn/ncovh5/view/pneumonia");
