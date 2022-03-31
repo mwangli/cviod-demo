@@ -26,9 +26,8 @@ public class JsoupTest {
         System.out.println(title.text());
     }
 
-    @SneakyThrows
     @Test
-    public void testGetElement(){
+    public void testGetElement() throws IOException {
         // 获取文档
         Document document = Jsoup.connect("http://www.itcast.cn/?username=xx").get();
         System.out.println(document);

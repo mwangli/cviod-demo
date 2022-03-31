@@ -20,21 +20,14 @@ public class CovidDTO {
     private String provinceShortName;
     private Integer currentConfirmedCount;
     private Integer confirmedCount;
+    private Integer confirmedIncr;
     private Integer suspectedCount;
     private Integer curedCount;
     private Integer deadCount;
-    private String comment;
     private String locationId;
     private String pid;
     private String statisticsData;
-    private List<CovidDTO> statisticsDataList;
-    private String highDangerCount;
-    private String midDangerCount;
-    private String detectOrgCount;
-    private String vaccinationOrgCount;
     private String cities;
-    private String dangerAreas;
     private String cityName;
-    private String currentConfirmedCountStr;
     private String dateId;
 }

@@ -77,17 +77,22 @@ public class CovidCrawler {
                     kafkaTemplate.send("city_data", JSON.toJSONString(city));
                 });
             }
+            province.setCities(null);
             // 6.获取省份的历史数据
             String dataUrl = province.getStatisticsData();
             String data = HttpUtils.getHtml(dataUrl);
             JSONObject jsonObject = JSON.parseObject(data);
             String dataStr = jsonObject.getString("data");
             List<CovidDTO> dataList = JSON.parseArray(dataStr, CovidDTO.class);
-            province.setCities(null);
-            province.setStatisticsData(JSON.toJSONString(dataList));
-//            dataList.forEach(o -> kafkaTemplate.send("city_data", JSON.toJSONString(o)));
+            dataList.forEach(o -> {
+                o.setLocationId(province.getLocationId());
+                o.setProvinceShortName(province.getProvinceShortName());
+                kafkaTemplate.send("city_data", JSON.toJSONString(o));
+            });
             // 将省份数据发送到Kafka
             kafkaTemplate.send("city_data", JSON.toJSONString(province));
         });
     }
 }
+
+
