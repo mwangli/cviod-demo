@@ -12,7 +12,6 @@ case class CovidDTO(
      locationId: String,
      pid: String,
      statisticsData: String,
-     statisticsDataList: List[CovidDTO],
      highDangerCount: String,
      midDangerCount: String,
      detectOrgCount: String,

@@ -84,9 +84,10 @@ public class CovidCrawler {
             String dataStr = jsonObject.getString("data");
             List<CovidDTO> dataList = JSON.parseArray(dataStr, CovidDTO.class);
             province.setCities(null);
-            dataList.forEach(o -> kafkaTemplate.send("province_data", JSON.toJSONString(o)));
+            province.setStatisticsData(JSON.toJSONString(dataList));
+//            dataList.forEach(o -> kafkaTemplate.send("city_data", JSON.toJSONString(o)));
             // 将省份数据发送到Kafka
-            kafkaTemplate.send("province_data", JSON.toJSONString(province));
+            kafkaTemplate.send("city_data", JSON.toJSONString(province));
         });
     }
 }
