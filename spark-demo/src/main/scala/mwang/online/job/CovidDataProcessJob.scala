@@ -77,24 +77,24 @@ object CovidDataProcessJob {
           statement.setString(7, DateUtils.format(System.currentTimeMillis(), "yyyy-MM-dd HH:mm:ss"))
           statement.execute()
         }
+      }).start()
+    result2.writeStream.format("console").outputMode("append").trigger(Trigger.ProcessingTime(0)).option("truncate", value = false).start()
+    result2.writeStream.outputMode("append")
+      .trigger(Trigger.ProcessingTime(0)).option("truncate", value = false)
+      .foreach(new BaseJdbcSink("replace into t_result2 values(?,?,?,?,?,?,?,?) ") {
+        override def doProcess(sql: String, row: Row): Unit = {
+          statement = connection.prepareStatement(sql)
+          statement.setString(1, row.getAs[String]("dateId"))
+          statement.setString(2, row.getAs[String]("provinceShortName"))
+          statement.setLong(3, row.getAs[Long]("currentConfirmedCount"))
+          statement.setLong(4, row.getAs[Long]("confirmedCount"))
+          statement.setLong(5, row.getAs[Long]("suspectedCount"))
+          statement.setLong(6, row.getAs[Long]("curedCount"))
+          statement.setLong(7, row.getAs[Long]("deadCount"))
+          statement.setString(8, DateUtils.format(System.currentTimeMillis(), "yyyy-MM-dd HH:mm:ss"))
+          statement.execute()
+        }
       }).start().awaitTermination()
-//    result2.writeStream.format("console").outputMode("append").trigger(Trigger.ProcessingTime(0)).option("truncate", value = false).start()
-//    result2.writeStream.outputMode("append")
-//      .trigger(Trigger.ProcessingTime(0)).option("truncate", value = false)
-//      .foreach(new BaseJdbcSink("replace into t_result2 values(?,?,?,?,?,?,?,?) ") {
-//        override def doProcess(sql: String, row: Row): Unit = {
-//          statement = connection.prepareStatement(sql)
-//          statement.setString(1, row.getAs[String]("dateId"))
-//          statement.setString(2, row.getAs[String]("provinceShortName"))
-//          statement.setLong(3, row.getAs[Long]("currentConfirmedCount"))
-//          statement.setLong(4, row.getAs[Long]("confirmedCount"))
-//          statement.setLong(5, row.getAs[Long]("suspectedCount"))
-//          statement.setLong(6, row.getAs[Long]("curedCount"))
-//          statement.setLong(7, row.getAs[Long]("deadCount"))
-//          statement.setString(8, DateUtils.format(System.currentTimeMillis(), "yyyy-MM-dd HH:mm:ss"))
-//          statement.execute()
-//        }
-//      }).start().awaitTermination()
     //    result3.writeStream.outputMode("complete")
     //      .trigger(Trigger.ProcessingTime(0)).option("truncate", value = false)
     //      .foreach(new BaseJdbcSink("replace into t_result3 values(?,?,?,?,?,?) ") {
