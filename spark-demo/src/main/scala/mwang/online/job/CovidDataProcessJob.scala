@@ -2,9 +2,10 @@ package mwang.online.job
 
 import com.alibaba.fastjson.JSON
 import mwang.online.bean.{CovidDTO, ProvinceDataDTO}
+import mwang.online.utils.{BaseJdbcSink, DateUtils}
 import org.apache.spark.sql.streaming.Trigger
 import org.apache.spark.{SparkConf, SparkContext}
-import org.apache.spark.sql.{DataFrame, Dataset, SparkSession}
+import org.apache.spark.sql.{DataFrame, Dataset, ForeachWriter, Row, SparkSession}
 
 object CovidDataProcessJob {
 
@@ -61,8 +62,81 @@ object CovidDataProcessJob {
     // 城市累计排行
     val result5 = cityDS.filter(_.provinceShortName == "杭州")
       .select('dateId, 'provinceShortName, 'cityName, 'currentConfirmedCount, 'confirmedCount, 'suspectedCount, 'curedCount, 'deadCount)
-//      .sort('confirmedCount.desc)
     // 4.保存结果
-    result5.writeStream.format("console").outputMode("append").trigger(Trigger.ProcessingTime(0)).option("truncate", value = false).start().awaitTermination()
+    result1.writeStream.format("console").outputMode("complete").trigger(Trigger.ProcessingTime(0)).option("truncate", value = false).start()
+    result1.writeStream.outputMode("complete")
+      .foreach(new BaseJdbcSink("replace into t_result1 values(?,?,?,?,?,?,?) ") {
+        override def doProcess(sql: String, row: Row): Unit = {
+          statement = connection.prepareStatement(sql)
+          statement.setString(1, row.getAs[String]("dateId"))
+          statement.setLong(2, row.getAs[Long]("currentConfirmedCount"))
+          statement.setLong(3, row.getAs[Long]("confirmedCount"))
+          statement.setLong(4, row.getAs[Long]("suspectedCount"))
+          statement.setLong(5, row.getAs[Long]("curedCount"))
+          statement.setLong(6, row.getAs[Long]("deadCount"))
+          statement.setString(7, DateUtils.format(System.currentTimeMillis(), "yyyy-MM-dd HH:mm:ss"))
+          statement.execute()
+        }
+      }).start().awaitTermination()
+//    result2.writeStream.format("console").outputMode("append").trigger(Trigger.ProcessingTime(0)).option("truncate", value = false).start()
+//    result2.writeStream.outputMode("append")
+//      .trigger(Trigger.ProcessingTime(0)).option("truncate", value = false)
+//      .foreach(new BaseJdbcSink("replace into t_result2 values(?,?,?,?,?,?,?,?) ") {
+//        override def doProcess(sql: String, row: Row): Unit = {
+//          statement = connection.prepareStatement(sql)
+//          statement.setString(1, row.getAs[String]("dateId"))
+//          statement.setString(2, row.getAs[String]("provinceShortName"))
+//          statement.setLong(3, row.getAs[Long]("currentConfirmedCount"))
+//          statement.setLong(4, row.getAs[Long]("confirmedCount"))
+//          statement.setLong(5, row.getAs[Long]("suspectedCount"))
+//          statement.setLong(6, row.getAs[Long]("curedCount"))
+//          statement.setLong(7, row.getAs[Long]("deadCount"))
+//          statement.setString(8, DateUtils.format(System.currentTimeMillis(), "yyyy-MM-dd HH:mm:ss"))
+//          statement.execute()
+//        }
+//      }).start().awaitTermination()
+    //    result3.writeStream.outputMode("complete")
+    //      .trigger(Trigger.ProcessingTime(0)).option("truncate", value = false)
+    //      .foreach(new BaseJdbcSink("replace into t_result3 values(?,?,?,?,?,?) ") {
+    //        override def doProcess(sql: String, row: Row): Unit = {
+    //          statement = connection.prepareStatement(sql)
+    //          statement.setString(1, row.getAs[String]("dateId"))
+    //          statement.setLong(2, row.getAs[Long]("confirmedIncr"))
+    //          statement.setLong(3, row.getAs[Long]("confirmedCount"))
+    //          statement.setLong(4, row.getAs[Long]("suspectedCount"))
+    //          statement.setLong(5, row.getAs[Long]("curedCount"))
+    //          statement.setLong(6, row.getAs[Long]("deadCount"))
+    //          statement.execute()
+    //        }
+    //      }).start()
+    //    result4.writeStream.outputMode("complete")
+    //      .trigger(Trigger.ProcessingTime(0)).option("truncate", value = false)
+    //      .foreach(new BaseJdbcSink("replace into t_result4 values(?,?,?,?) ") {
+    //        override def doProcess(sql: String, row: Row): Unit = {
+    //          statement = connection.prepareStatement(sql)
+    //          statement.setString(1, row.getAs[String]("dateId"))
+    //          statement.setString(2, row.getAs[String]("pid"))
+    //          statement.setString(3, row.getAs[String]("provinceShortName"))
+    //          statement.setLong(4, row.getAs[Long]("confirmedCount"))
+    //          statement.execute()
+    //        }
+    //      }).start()
+    //    result5.writeStream.outputMode("append")
+    //      .trigger(Trigger.ProcessingTime(0)).option("truncate", value = false)
+    //      .foreach(new BaseJdbcSink("replace into t_result5 values(?,?,?,?,?,?,?,?) ") {
+    //        override def doProcess(sql: String, row: Row): Unit = {
+    //          statement = connection.prepareStatement(sql)
+    //          statement.setString(1, row.getAs[String]("dateId"))
+    //          statement.setString(2, row.getAs[String]("provinceShortName"))
+    //          statement.setString(3, row.getAs[String]("cityName"))
+    //          statement.setLong(4, row.getAs[Long]("currentConfirmedCount"))
+    //          statement.setLong(5, row.getAs[Long]("confirmedCount"))
+    //          statement.setLong(6, row.getAs[Long]("suspectedCount"))
+    //          statement.setLong(7, row.getAs[Long]("curedCount"))
+    //          statement.setLong(8, row.getAs[Long]("deadCount"))
+    //          statement.execute()
+    //        }
+    //      }).start().awaitTermination()
   }
+
 }
