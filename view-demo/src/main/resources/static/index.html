@@ -10,17 +10,36 @@
 <body>
 <!-- 为 ECharts 准备一个定义了宽高的 DOM -->
 
-<div id="main" style="width: 100%;height:600px;"></div>
+<div id="v2" style="width: 100%;height:600px;"></div>
+<div id="v3" style="width: 100%;height:600px;"></div>
+<div id="v4" style="width: 100%;height:600px;"></div>
+<div id="v5" style="width: 100%;height:600px;"></div>
 <script type="text/javascript">
-    var chartDom = document.getElementById('main');
-    var myChart = echarts.init(chartDom);
-    var option;
 
-    // 异步加载数据
-    $.get('/v3').done(function(data) {
+    var chartDom2 = document.getElementById('v2');
+    var myChart2 = echarts.init(chartDom2);
+    $.get('/v2').done(function (data) {
         console.log(data)
         // 填入数据
-        myChart.setOption({
+        myChart2.setOption({
+            legend: {},
+            tooltip: {},
+            dataset: {
+                dimensions: ['provinceShortName', 'currentConfirmedCount1', 'confirmedCount', 'suspectedCount', 'curedCount', 'deadCount'],
+                source: data
+            },
+            xAxis: {type: 'category'},
+            yAxis: {},
+            series: [{type: 'bar'}, {type: 'bar'}, {type: 'bar'}, {type: 'bar'}, {type: 'bar'},]
+        });
+    });
+
+    var chartDom3 = document.getElementById('v3');
+    var myChart3 = echarts.init(chartDom3);
+    $.get('/v3').done(function (data) {
+        console.log(data)
+        // 填入数据
+        myChart3.setOption({
             title: {
                 text: '全国历史数据'
             },
@@ -54,35 +73,146 @@
                     name: '新增确诊',
                     type: 'line',
                     stack: 'Total',
+                    smooth: true,
                     data: data.confirmedIncrData
                 },
                 {
                     name: '累计确诊',
                     type: 'line',
                     stack: 'Total',
+                    smooth: true,
                     data: data.confirmedCountData
                 },
                 {
                     name: '疑似病例',
                     type: 'line',
                     stack: 'Total',
+                    smooth: true,
                     data: data.suspectedCountData
                 },
                 {
                     name: '累计治愈',
                     type: 'line',
                     stack: 'Total',
+                    smooth: true,
                     data: data.curedCountData
                 },
                 {
                     name: '累计死亡',
                     type: 'line',
                     stack: 'Total',
+                    smooth: true,
                     data: data.deadCountData
                 }
             ]
         });
     });
+
+
+    var chartDom4 = document.getElementById('v4');
+    var myChart4 = echarts.init(chartDom4);
+    $.get('/v4').done(function (data) {
+        console.log(data)
+        // 填入数据
+        myChart4.setOption({
+            tooltip: {
+                trigger: 'item'
+            },
+            legend: {
+                top: '5%',
+                left: 'center'
+            },
+            series: [
+                {
+                    name: '境外输入累计确诊',
+                    type: 'pie',
+                    radius: ['40%', '70%'],
+                    avoidLabelOverlap: false,
+                    itemStyle: {
+                        borderRadius: 10,
+                        borderColor: '#fff',
+                        borderWidth: 2
+                    },
+                    label: {
+                        show: false,
+                        position: 'center'
+                    },
+                    emphasis: {
+                        label: {
+                            show: true,
+                            fontSize: '40',
+                            fontWeight: 'bold'
+                        }
+                    },
+                    labelLine: {
+                        show: false
+                    },
+                    data: data
+                }
+            ]
+        });
+    });
+
+    var chartDom5 = document.getElementById('v5');
+    var myChart5 = echarts.init(chartDom5);
+    $.get('/v5').done(function (data) {
+        console.log(data)
+        // 填入数据
+        myChart5.setOption({
+            title: {
+                text: '浙江省各个城市数据'
+            },
+            tooltip: {
+                trigger: 'axis',
+                axisPointer: {
+                    type: 'shadow'
+                }
+            },
+            legend: {},
+            grid: {
+                left: '3%',
+                right: '4%',
+                bottom: '3%',
+                containLabel: true
+            },
+            xAxis: {
+                type: 'value',
+                boundaryGap: [0, 0.01]
+            },
+            yAxis: {
+                type: 'category',
+                data: data.cityNameList
+            },
+            series: [
+                {
+                    name: '当前确诊人数',
+                    type: 'bar',
+                    data: data.currentConfirmedIncrData
+                },
+                {
+                    name: '累计确诊人数',
+                    type: 'bar',
+                    data: data.confirmedCountData
+                },
+                {
+                    name: '疑似病例人数',
+                    type: 'bar',
+                    data: data.suspectedCountData
+                },
+                {
+                    name: '累计治愈人数',
+                    type: 'bar',
+                    data: data.curedCountData
+                },
+                {
+                    name: '累计死亡人数',
+                    type: 'bar',
+                    data: data.deadCountData
+                },
+            ]
+        });
+    });
+
 </script>
 </body>
 </html>

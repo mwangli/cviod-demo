@@ -33,7 +33,8 @@ public class DataViewController {
 
     @GetMapping("/v2")
     public List<CovidDTO> getData2() {
-        return dataViewMapper.getData2();
+        // 获取各个省份数据
+        return dataViewMapper.getData2().stream().filter(o -> !"香港".equals(o.getProvinceShortName())).collect(Collectors.toList());
     }
 
     @GetMapping("/v3")
@@ -58,20 +59,42 @@ public class DataViewController {
     }
 
     @GetMapping("/v4")
-    public List<CovidDTO> getData4() {
-        return dataViewMapper.getData4();
+    public List<JSONObject> getData4() {
+        // 境外输入top10
+        List<CovidDTO> data4 = dataViewMapper.getData4();
+        return data4.stream().map(o -> {
+            JSONObject res = new JSONObject();
+            res.put("value", o.getConfirmedCount());
+            res.put("name", o.getProvinceShortName());
+            return res;
+        }).collect(Collectors.toList());
     }
 
     @GetMapping("/v5")
-    public List<CovidDTO> getData5() {
-        return dataViewMapper.getData5();
+    public JSONObject getData5() {
+        // 浙江省各个城市数据
+        JSONObject result = new JSONObject();
+        List<CovidDTO> data = dataViewMapper.getData5();
+        List<String> cityNameList = data.stream().map(CovidDTO::getCityName).collect(Collectors.toList());
+        result.put("cityNameList", cityNameList);
+        List<Integer> currentConfirmedIncrData = data.stream().map(CovidDTO::getCurrentConfirmedCount).collect(Collectors.toList());
+        result.put("currentConfirmedIncrData", currentConfirmedIncrData);
+        List<Integer> confirmedCountData = data.stream().map(CovidDTO::getConfirmedCount).collect(Collectors.toList());
+        result.put("confirmedCountData", confirmedCountData);
+        List<Integer> suspectedCountData = data.stream().map(CovidDTO::getSuspectedCount).collect(Collectors.toList());
+        result.put("suspectedCountData", suspectedCountData);
+        List<Integer> curedCountData = data.stream().map(CovidDTO::getCuredCount).collect(Collectors.toList());
+        result.put("curedCountData", curedCountData);
+        List<Integer> deadCountData = data.stream().map(CovidDTO::getDeadCount).collect(Collectors.toList());
+        result.put("deadCountData", deadCountData);
+        return result;
     }
 
     private boolean in30Days(CovidDTO data) {
         String dateId = data.getDateId();
         Date date = DateUtils.parse(dateId, "yyyyMMdd");
         Date now = new Date();
-        Date pre30Date = DateUtils.getNextDate(now, -31);
+        Date pre30Date = DateUtils.getNextDate(now, -30);
         return date.getTime() >= pre30Date.getTime() && date.getTime() <= now.getTime();
     }
 }
