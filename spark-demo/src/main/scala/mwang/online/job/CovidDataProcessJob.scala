@@ -34,13 +34,8 @@ object CovidDataProcessJob {
     // 获取城市数据
     val cityDS: Dataset[CovidDTO] = covidDS.filter(_.cityName != null)
     // 3.聚合数据
-    // 当日全国汇总数据
-    val result1 = provinceDS.filter(_.statisticsData != null).groupBy('dateId)
-      .agg(sum('currentConfirmedCount) as "currentConfirmedCount",
-        sum('confirmedCount) as "confirmedCount",
-        sum('suspectedCount) as "suspectedCount",
-        sum('curedCount) as "curedCount",
-        sum('deadCount) as "deadCount")
+    // 当日城市全部数据
+    val result1 = cityDS.select('dateId, 'provinceShortName, 'cityName, 'currentConfirmedCount, 'confirmedCount, 'suspectedCount, 'curedCount, 'deadCount)
     // 当日各省累计数据
     val result2 = provinceDS.filter(_.statisticsData != null)
       .select('dateId, 'provinceShortName, 'currentConfirmedCount, 'confirmedCount, 'suspectedCount, 'curedCount, 'deadCount)
@@ -60,18 +55,20 @@ object CovidDataProcessJob {
     val result5 = cityDS.filter(_.provinceShortName == "浙江")
       .select('dateId, 'provinceShortName, 'cityName, 'currentConfirmedCount, 'confirmedCount, 'suspectedCount, 'curedCount, 'deadCount)
     // 4.保存结果
-    result1.writeStream.format("console").outputMode("complete").trigger(Trigger.ProcessingTime(0)).option("truncate", value = false).start()
-    result1.writeStream.outputMode("complete")
-      .foreach(new BaseJdbcSink("replace into t_result1 values(?,?,?,?,?,?,?) ") {
+    result1.writeStream.format("console").outputMode("append").trigger(Trigger.ProcessingTime(0)).option("truncate", value = false).start()
+    result1.writeStream.outputMode("append")
+      .foreach(new BaseJdbcSink("replace into t_result1 values(?,?,?,?,?,?,?,?,?) ") {
         override def doProcess(sql: String, row: Row): Unit = {
           statement = connection.prepareStatement(sql)
           statement.setString(1, row.getAs[String]("dateId"))
-          statement.setLong(2, row.getAs[Long]("currentConfirmedCount"))
-          statement.setLong(3, row.getAs[Long]("confirmedCount"))
-          statement.setLong(4, row.getAs[Long]("suspectedCount"))
-          statement.setLong(5, row.getAs[Long]("curedCount"))
-          statement.setLong(6, row.getAs[Long]("deadCount"))
-          statement.setString(7, DateUtils.format(System.currentTimeMillis(), "yyyy-MM-dd HH:mm:ss"))
+          statement.setString(2, row.getAs[String]("provinceShortName"))
+          statement.setString(3, row.getAs[String]("cityName"))
+          statement.setLong(4, row.getAs[Long]("currentConfirmedCount"))
+          statement.setLong(5, row.getAs[Long]("confirmedCount"))
+          statement.setLong(6, row.getAs[Long]("suspectedCount"))
+          statement.setLong(7, row.getAs[Long]("curedCount"))
+          statement.setLong(8, row.getAs[Long]("deadCount"))
+          statement.setString(9, DateUtils.format(System.currentTimeMillis(), "yyyy-MM-dd HH:mm:ss"))
           statement.execute()
         }
       }).start()
