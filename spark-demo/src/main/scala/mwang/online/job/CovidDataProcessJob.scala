@@ -60,7 +60,7 @@ object CovidDataProcessJob {
     val result5 = cityDS.filter(_.provinceShortName == "浙江")
       .select('dateId, 'provinceShortName, 'cityName, 'currentConfirmedCount, 'confirmedCount, 'suspectedCount, 'curedCount, 'deadCount)
     // 4.保存结果
-    // result1.writeStream.format("console").outputMode("complete").trigger(Trigger.ProcessingTime(0)).option("truncate", value = false).start()
+    result1.writeStream.format("console").outputMode("complete").trigger(Trigger.ProcessingTime(0)).option("truncate", value = false).start()
     result1.writeStream.outputMode("complete")
       .foreach(new BaseJdbcSink("replace into t_result1 values(?,?,?,?,?,?,?) ") {
         override def doProcess(sql: String, row: Row): Unit = {
@@ -75,7 +75,7 @@ object CovidDataProcessJob {
           statement.execute()
         }
       }).start()
-    // result2.writeStream.format("console").outputMode("append").trigger(Trigger.ProcessingTime(0)).option("truncate", value = false).start()
+    result2.writeStream.format("console").outputMode("append").trigger(Trigger.ProcessingTime(0)).option("truncate", value = false).start()
     result2.writeStream.outputMode("append")
       .trigger(Trigger.ProcessingTime(0)).option("truncate", value = false)
       .foreach(new BaseJdbcSink("replace into t_result2 values(?,?,?,?,?,?,?,?) ") {
@@ -92,7 +92,7 @@ object CovidDataProcessJob {
           statement.execute()
         }
       }).start()
-    // result3.writeStream.format("console").outputMode("complete").trigger(Trigger.ProcessingTime(0)).option("truncate", value = false).start()
+    result3.writeStream.format("console").outputMode("complete").trigger(Trigger.ProcessingTime(0)).option("truncate", value = false).start()
     result3.writeStream.outputMode("complete")
       .trigger(Trigger.ProcessingTime(0)).option("truncate", value = false)
       .foreach(new BaseJdbcSink("replace into t_result3 values(?,?,?,?,?,?,?) ") {
@@ -108,7 +108,7 @@ object CovidDataProcessJob {
           statement.execute()
         }
       }).start()
-    // result4.writeStream.format("console").outputMode("complete").trigger(Trigger.ProcessingTime(0)).option("truncate", value = false).start()
+    result4.writeStream.format("console").outputMode("complete").trigger(Trigger.ProcessingTime(0)).option("truncate", value = false).start()
     result4.writeStream.outputMode("complete")
       .trigger(Trigger.ProcessingTime(0)).option("truncate", value = false)
       .foreach(new BaseJdbcSink("replace into t_result4 values(?,?,?,?) ") {
@@ -121,7 +121,7 @@ object CovidDataProcessJob {
           statement.execute()
         }
       }).start()
-    // result5.writeStream.format("console").outputMode("append").trigger(Trigger.ProcessingTime(0)).option("truncate", value = false).start()
+    result5.writeStream.format("console").outputMode("append").trigger(Trigger.ProcessingTime(0)).option("truncate", value = false).start()
     result5.writeStream.outputMode("append")
       .trigger(Trigger.ProcessingTime(0)).option("truncate", value = false)
       .foreach(new BaseJdbcSink("replace into t_result5 values(?,?,?,?,?,?,?,?,?) ") {

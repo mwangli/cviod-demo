@@ -29,7 +29,7 @@ object ItemDataProcessJob {
       .setMaster("local[*]")
     val sc = new SparkContext(conf)
     sc.setLogLevel("WARN")
-    val ssc = new StreamingContext(sc, Seconds(5))
+    val ssc = new StreamingContext(sc, Seconds(10))
     ssc.checkpoint("D:\\ssc_check_point")
     val groupId = "sparkKafka"
     val topic = "item_data"

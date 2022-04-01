@@ -30,7 +30,7 @@ public class MockData {
     private String[] itemFrom = new String[]{"采购", "下拨", "捐赠", "消耗", "需求"};
 
     @Test
-    @Scheduled(cron = "0/30 * * * * ?")
+    @Scheduled(cron = "0/10 * * * * ?")
     public void mock() {
         // 1.模拟生成物资数据
         Random random = new Random();
