@@ -2,7 +2,8 @@ package mwang.online.job
 
 import com.alibaba.fastjson.JSON
 import mwang.online.bean.CovidDTO
-import mwang.online.utils.{BaseJdbcSink, DateUtils}
+import mwang.online.utils.BaseJdbcSink
+import mwangli.online.utils.DateUtils
 import org.apache.spark.sql.streaming.Trigger
 import org.apache.spark.{SparkConf, SparkContext}
 import org.apache.spark.sql.{DataFrame, Dataset, ForeachWriter, Row, SparkSession}
@@ -56,7 +57,7 @@ object CovidDataProcessJob {
       .agg(sum('confirmedCount) as "confirmedCount")
       .sort('confirmedCount.desc)
     // 当日杭州数据
-    val result5 = cityDS.filter(_.cityName == "杭州")
+    val result5 = cityDS.filter(_.provinceShortName == "浙江")
       .select('dateId, 'provinceShortName, 'cityName, 'currentConfirmedCount, 'confirmedCount, 'suspectedCount, 'curedCount, 'deadCount)
     // 4.保存结果
     // result1.writeStream.format("console").outputMode("complete").trigger(Trigger.ProcessingTime(0)).option("truncate", value = false).start()

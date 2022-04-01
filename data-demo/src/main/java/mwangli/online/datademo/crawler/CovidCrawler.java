@@ -75,6 +75,11 @@ public class CovidCrawler {
                     city.setProvinceShortName(province.getProvinceShortName());
                     // 将城市数据发送到Kafka
                     kafkaTemplate.send("city_data", JSON.toJSONString(city));
+                    try {
+                        Thread.sleep(100);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                 });
             }
             province.setCities(null);
@@ -88,9 +93,19 @@ public class CovidCrawler {
                 o.setLocationId(province.getLocationId());
                 o.setProvinceShortName(province.getProvinceShortName());
                 kafkaTemplate.send("city_data", JSON.toJSONString(o));
+                try {
+                    Thread.sleep(100);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             });
             // 将省份数据发送到Kafka
             kafkaTemplate.send("city_data", JSON.toJSONString(province));
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         });
     }
 }

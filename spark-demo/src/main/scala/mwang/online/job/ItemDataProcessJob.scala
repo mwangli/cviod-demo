@@ -7,7 +7,8 @@ package mwang.online.job
  */
 
 import com.alibaba.fastjson.JSON
-import mwang.online.utils.{DateUtils, OffsetUtils}
+import mwang.online.utils.OffsetUtils
+import mwangli.online.utils.DateUtils
 import org.apache.kafka.clients.consumer.ConsumerRecord
 import org.apache.kafka.common.TopicPartition
 import org.apache.kafka.common.serialization.StringDeserializer
