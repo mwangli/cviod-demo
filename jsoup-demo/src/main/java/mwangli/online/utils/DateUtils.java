@@ -17,9 +17,13 @@ public class DateUtils {
         return FastDateFormat.getInstance(pattern).format(timestamp);
     }
 
-    @SneakyThrows
     public static Date parse(String dateStr, String pattern) {
-        return FastDateFormat.getInstance(pattern).parse(dateStr);
+        try {
+            return FastDateFormat.getInstance(pattern).parse(dateStr);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     /**

@@ -6,6 +6,8 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 /**
  * @author mwangli
@@ -28,4 +30,7 @@ public interface DataViewMapper {
 
     @Select("select * from t_result5 where dateId = DATE_FORMAT(NOW(),'%Y%m%d')")
     List<CovidDTO> getData5();
+
+    @Select("select * from t_result6")
+    List<Map<String,Object>> getData6();
 }

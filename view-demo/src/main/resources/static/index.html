@@ -6,15 +6,76 @@
     <!-- 引入刚刚下载的 ECharts 文件 -->
     <script src="js/echarts.js"></script>
     <script src="js/jquery-3.6.0.js"></script>
+    <script src="js/china.js"></script>
 </head>
 <body>
-<!-- 为 ECharts 准备一个定义了宽高的 DOM -->
 
-<div id="v2" style="width: 100%;height:600px;"></div>
-<div id="v3" style="width: 100%;height:600px;"></div>
-<div id="v4" style="width: 100%;height:600px;"></div>
-<div id="v5" style="width: 100%;height:600px;"></div>
+<div id="v1" style="width: 100%;height:800px;margin-top: 40px"></div>
+<hr/>
+<div id="v2" style="width: 100%;height:600px;margin-top: 40px"></div>
+<hr/>
+<div id="v3" style="width: 100%;height:600px;margin-top: 40px"></div>
+<hr/>
+<div id="v4" style="width: 100%;height:600px;margin-top: 40px"></div>
+<hr/>
+<div id="v5" style="width: 100%;height:600px;margin-top: 40px"></div>
+<hr/>
+<div id="v6" style="width: 100%;height:600px;margin-top: 40px"></div>
 <script type="text/javascript">
+
+    var chartDom1 = document.getElementById("v1");
+    var mycChart1 = echarts.init(chartDom1);
+    $.get('/v1').done(function (data) {
+        console.log(data)
+        // 填入数据
+        mycChart1.setOption({
+            title: {  //标题样式
+                text: '今日各省份当前确诊人数地图展示'
+            },
+            tooltip: {  //这里设置提示框
+                trigger: 'item',  //数据项图形触发
+                backgroundColor: "white",  //提示框浮层的背景颜色。
+                //字符串模板(地图): {a}（系列名称），{b}（区域名称），{c}（合并数值）,{d}（无）
+                formatter: '省份：{b}<br/>当前确诊人数：{c}'
+            },
+            visualMap: {//视觉映射组件
+                top: '60%',
+                left: '20%',
+                min: 10,
+                max: 1000,
+                text: ['高', '低'],
+                realtime: false,  //拖拽时，是否实时更新
+                calculable: true,  //是否显示拖拽用的手柄
+                inRange: {
+                    color: ['#1E90FF', '#99ddff', '#9999ff', '#F0E68C', '#ff99ff', '#ff99cc', '#ff99bb', '#ff99c2', '#B22222']
+                }
+            },
+            series: [
+                {
+                    name: '模拟数据',
+                    type: 'map',
+                    mapType: 'china',
+                    roam: false,//是否开启鼠标缩放和平移漫游
+                    itemStyle: {//地图区域的多边形 图形样式
+                        normal: {//是图形在默认状态下的样式
+                            label: {
+                                show: true,//是否显示标签
+                                textStyle: {
+                                    color: "black"
+                                }
+                            }
+                        },
+                        zoom: 1,  //地图缩放比例,默认为1
+                        emphasis: {//是图形在高亮状态下的样式,比如在鼠标悬浮或者图例联动高亮时
+                            label: {show: true}
+                        }
+                    },
+                    top: "3%",//组件距离容器的距离
+                    data: data
+                }
+            ]
+        });
+    });
 
     var chartDom2 = document.getElementById('v2');
     var myChart2 = echarts.init(chartDom2);
@@ -22,10 +83,13 @@
         console.log(data)
         // 填入数据
         myChart2.setOption({
+            title: {
+                text: '今日各省份累计数据(除香港)'
+            },
             legend: {},
             tooltip: {},
             dataset: {
-                dimensions: ['provinceShortName', 'currentConfirmedCount1', 'confirmedCount', 'suspectedCount', 'curedCount', 'deadCount'],
+                dimensions: ['省份简称', '当前确诊人数', '累计确诊人数', '疑似病例人数', '累计治愈人数', '累计死亡人数'],
                 source: data
             },
             xAxis: {type: 'category'},
@@ -41,7 +105,7 @@
         // 填入数据
         myChart3.setOption({
             title: {
-                text: '全国历史数据'
+                text: '最近30天全国汇总数据'
             },
             tooltip: {
                 trigger: 'axis'
@@ -108,13 +172,15 @@
         });
     });
 
-
     var chartDom4 = document.getElementById('v4');
     var myChart4 = echarts.init(chartDom4);
     $.get('/v4').done(function (data) {
         console.log(data)
         // 填入数据
         myChart4.setOption({
+            title: {
+                text: '境外输入累计确诊Top10'
+            },
             tooltip: {
                 trigger: 'item'
             },
@@ -160,7 +226,7 @@
         // 填入数据
         myChart5.setOption({
             title: {
-                text: '浙江省各个城市数据'
+                text: '今日浙江省各城市数据'
             },
             tooltip: {
                 trigger: 'axis',
@@ -212,6 +278,28 @@
             ]
         });
     });
+
+    var chartDom6 = document.getElementById('v6');
+    var myChart6 = echarts.init(chartDom6);
+    setInterval(() => $.get('/v6').done(function (data) {
+        console.log(data)
+        // 填入数据
+        myChart6.setOption({
+            title: {
+                text: '防疫物资实时数据展示'
+            },
+            legend: {},
+            tooltip: {},
+            dataset: {
+                dimensions: ['物资名称', '采购', '下拨', '捐赠', '消耗', '需求', '库存'],
+                source: data
+            },
+            xAxis: {type: 'category'},
+            yAxis: {},
+            series: [{type: 'bar'}, {type: 'bar'}, {type: 'bar'}, {type: 'bar'}, {type: 'bar'}, {type: 'bar'}]
+        });
+    }), 5000)
+
 
 </script>
 </body>

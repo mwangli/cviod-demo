@@ -27,14 +27,30 @@ public class DataViewController {
     private DataViewMapper dataViewMapper;
 
     @GetMapping("/v1")
-    public List<CovidDTO> getData1() {
-        return dataViewMapper.getData1();
+    public List<JSONObject> getData1() {
+        List<CovidDTO> data = dataViewMapper.getData2();
+        return data.stream().map(o -> {
+            JSONObject res = new JSONObject();
+            res.put("name", o.getProvinceShortName());
+            res.put("value", o.getCurrentConfirmedCount());
+            return res;
+        }).collect(Collectors.toList());
     }
 
     @GetMapping("/v2")
-    public List<CovidDTO> getData2() {
+    public List<JSONObject> getData2() {
         // 获取各个省份数据
-        return dataViewMapper.getData2().stream().filter(o -> !"香港".equals(o.getProvinceShortName())).collect(Collectors.toList());
+        return dataViewMapper.getData2().stream().filter(o -> !"香港".equals(o.getProvinceShortName()))
+                .map(o -> {
+                    JSONObject result = new JSONObject();
+                    result.put("省份简称", o.getProvinceShortName());
+                    result.put("当前确诊人数", o.getCurrentConfirmedCount());
+                    result.put("累计确诊人数", o.getConfirmedCount());
+                    result.put("疑似病例人数", o.getSuspectedCount());
+                    result.put("累计治愈人数", o.getCuredCount());
+                    result.put("累计死亡人数", o.getDeadCount());
+                    return result;
+                }).collect(Collectors.toList());
     }
 
     @GetMapping("/v3")
@@ -88,6 +104,23 @@ public class DataViewController {
         List<Integer> deadCountData = data.stream().map(CovidDTO::getDeadCount).collect(Collectors.toList());
         result.put("deadCountData", deadCountData);
         return result;
+    }
+
+    @GetMapping("/v6")
+    public List<JSONObject> getData6() {
+        // 防疫物资实时数据
+        return dataViewMapper.getData6().stream()
+                .map(o -> {
+                    JSONObject result = new JSONObject();
+                    result.put("物资名称", o.get("name"));
+                    result.put("采购", o.get("cg"));
+                    result.put("下拨", o.get("xb"));
+                    result.put("捐赠", o.get("jz"));
+                    result.put("消耗", o.get("xh"));
+                    result.put("需求", o.get("xq"));
+                    result.put("库存", o.get("kc"));
+                    return result;
+                }).collect(Collectors.toList());
     }
 
     private boolean in30Days(CovidDTO data) {

@@ -125,7 +125,7 @@ object ItemDataProcessJob {
       rdd.foreach(data => {
         val connection = DriverManager.getConnection("jdbc:mysql://112.74.187.216:3306/bigdata?characterEncoding=UTF-8&useSSL=false", "root", "Root.123456")
         // 2.编写SQL
-        val sql = "replace into item_data values(?,?,?,?,?,?,?,?)"
+        val sql = "replace into t_result6 values(?,?,?,?,?,?,?,?)"
         // 3.创建预编译语句
         val statement = connection.prepareStatement(sql)
         // 4.设置执行参数
