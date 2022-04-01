@@ -9,21 +9,80 @@
 </head>
 <body>
 <!-- 为 ECharts 准备一个定义了宽高的 DOM -->
-<div id="main" style="width: 600px;height:400px;"></div>
+
+<div id="main" style="width: 100%;height:600px;"></div>
 <script type="text/javascript">
-    var myChart = echarts.init(document.getElementById('main'));
-    $.get('http://localhost:8000/v1', function (data) {
+    var chartDom = document.getElementById('main');
+    var myChart = echarts.init(chartDom);
+    var option;
+
+    // 异步加载数据
+    $.get('/v3').done(function(data) {
+        console.log(data)
+        // 填入数据
         myChart.setOption({
-            series : [
+            title: {
+                text: '全国历史数据'
+            },
+            tooltip: {
+                trigger: 'axis'
+            },
+            legend: {
+                data: ['新增确诊', '累计确诊', '疑似病例', '累计治愈', '累计死亡']
+            },
+            grid: {
+                left: '3%',
+                right: '4%',
+                bottom: '3%',
+                containLabel: true
+            },
+            toolbox: {
+                feature: {
+                    saveAsImage: {}
+                }
+            },
+            xAxis: {
+                type: 'category',
+                boundaryGap: false,
+                data: data.dateIdList
+            },
+            yAxis: {
+                type: 'value'
+            },
+            series: [
                 {
-                    name: '访问来源',
-                    type: 'pie',    // 设置图表类型为饼图
-                    radius: '55%',  // 饼图的半径，外半径为可视区尺寸（容器高宽中较小一项）的 55% 长度。
-                    data:data.data_pie
+                    name: '新增确诊',
+                    type: 'line',
+                    stack: 'Total',
+                    data: data.confirmedIncrData
+                },
+                {
+                    name: '累计确诊',
+                    type: 'line',
+                    stack: 'Total',
+                    data: data.confirmedCountData
+                },
+                {
+                    name: '疑似病例',
+                    type: 'line',
+                    stack: 'Total',
+                    data: data.suspectedCountData
+                },
+                {
+                    name: '累计治愈',
+                    type: 'line',
+                    stack: 'Total',
+                    data: data.curedCountData
+                },
+                {
+                    name: '累计死亡',
+                    type: 'line',
+                    stack: 'Total',
+                    data: data.deadCountData
                 }
             ]
-        })
-    }, 'json')
+        });
+    });
 </script>
 </body>
 </html>

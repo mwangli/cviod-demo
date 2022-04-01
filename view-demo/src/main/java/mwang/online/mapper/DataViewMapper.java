@@ -20,7 +20,7 @@ public interface DataViewMapper {
     @Select("select * from t_result2 where dateId = DATE_FORMAT(NOW(),'%Y%m%d')")
     List<CovidDTO> getData2();
 
-    @Select("select * from t_result3")
+    @Select("select * from t_result3 order by dateId")
     List<CovidDTO> getData3();
 
     @Select("select * from t_result4 where dateId = DATE_FORMAT(NOW(),'%Y%m%d')")
