@@ -12,6 +12,7 @@
         <module>jsoup-demo</module>
         <module>data-demo</module>
         <module>spark-demo</module>
+        <module>view-demo</module>
     </modules>
 
     <properties>

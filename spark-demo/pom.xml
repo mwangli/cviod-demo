@@ -27,6 +27,11 @@
 
     <dependencies>
         <dependency>
+            <groupId>mwangli.online</groupId>
+            <artifactId>jsoup-demo</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+        <dependency>
             <groupId>org.scala-lang</groupId>
             <artifactId>scala-library</artifactId>
             <version>${scala.version}</version>
