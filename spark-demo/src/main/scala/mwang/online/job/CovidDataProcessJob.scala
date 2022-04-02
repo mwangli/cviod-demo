@@ -18,7 +18,6 @@ object CovidDataProcessJob {
 
     import sparkSession.implicits._
     import org.apache.spark.sql.functions._
-    import scala.collection.JavaConversions._
 
     // 1.连接kafka
     val kafkaDF: DataFrame = sparkSession.readStream
@@ -34,25 +33,47 @@ object CovidDataProcessJob {
     val cityDS: Dataset[CovidDTO] = covidDS.filter(_.cityName != null)
     // 3.聚合数据
     // 当日城市全部数据
-    val result1 = cityDS.select('dateId, 'provinceShortName, 'cityName, 'currentConfirmedCount, 'confirmedCount, 'suspectedCount, 'curedCount, 'deadCount)
+    val result1 = cityDS.select(
+      Symbol("dateId"),
+      Symbol("provinceShortName"),
+      Symbol("cityName"),
+      Symbol("currentConfirmedCount"),
+      Symbol("confirmedCount"),
+      Symbol("suspectedCount"),
+      Symbol("curedCount"),
+      Symbol("deadCount"))
     // 当日各省累计数据
     val result2 = provinceDS.filter(_.statisticsData != null)
-      .select('dateId, 'provinceShortName, 'currentConfirmedCount, 'confirmedCount, 'suspectedCount, 'curedCount, 'deadCount)
+      .select(
+        Symbol("dateId"),
+        Symbol("provinceShortName"),
+        Symbol("currentConfirmedCount"),
+        Symbol("confirmedCount"),
+        Symbol("suspectedCount"),
+        Symbol("curedCount"),
+        Symbol("deadCount"))
     // 历史全国汇总数据
-    val result3 = provinceDS.groupBy('dateId)
-      .agg(sum('confirmedIncr) as "confirmedIncr",
-        sum('confirmedCount) as "confirmedCount",
-        sum('suspectedCount) as "suspectedCount",
-        sum('curedCount) as "curedCount",
-        sum('deadCount) as "deadCount")
+    val result3 = provinceDS.groupBy(Symbol("dateId"))
+      .agg(sum(Symbol("confirmedIncr")) as "confirmedIncr",
+        sum(Symbol("confirmedCount")) as "confirmedCount",
+        sum(Symbol("suspectedCount")) as "suspectedCount",
+        sum(Symbol("curedCount")) as "curedCount",
+        sum(Symbol("deadCount")) as "deadCount")
     // 当日各省境外输入排行
     val result4 = cityDS.filter(_.cityName.contains("境外输入"))
-      .groupBy('dateId, 'pid, 'provinceShortName)
-      .agg(sum('confirmedCount) as "confirmedCount")
-      .sort('confirmedCount.desc)
+      .groupBy(Symbol("dateId"), Symbol("pid"), Symbol("provinceShortName"))
+      .agg(sum(Symbol("confirmedCount")) as "confirmedCount")
+      .sort(Symbol("confirmedCount").desc)
     // 当日杭州数据
     val result5 = cityDS.filter(_.provinceShortName == "浙江")
-      .select('dateId, 'provinceShortName, 'cityName, 'currentConfirmedCount, 'confirmedCount, 'suspectedCount, 'curedCount, 'deadCount)
+      .select(Symbol("dateId"),
+        Symbol("provinceShortName"),
+        Symbol("cityName"),
+        Symbol("currentConfirmedCount"),
+        Symbol("confirmedCount"),
+        Symbol("suspectedCount"),
+        Symbol("curedCount"),
+        Symbol("deadCount"))
     // 4.保存结果
     result1.writeStream.format("console").outputMode("append").trigger(Trigger.ProcessingTime(0)).option("truncate", value = false).start()
     result1.writeStream.outputMode("append")

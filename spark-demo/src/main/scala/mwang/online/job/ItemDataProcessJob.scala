@@ -12,12 +12,11 @@ import org.apache.kafka.clients.consumer.ConsumerRecord
 import org.apache.kafka.common.TopicPartition
 import org.apache.kafka.common.serialization.StringDeserializer
 import org.apache.spark.streaming.dstream.{DStream, InputDStream}
-import org.apache.spark.streaming.kafka010.{CanCommitOffsets, ConsumerStrategies, HasOffsetRanges, KafkaUtils, LocationStrategies}
+import org.apache.spark.streaming.kafka010.{ConsumerStrategies, HasOffsetRanges, KafkaUtils, LocationStrategies}
 import org.apache.spark.streaming.{Seconds, StreamingContext}
 import org.apache.spark.{SparkConf, SparkContext}
 
 import java.sql.DriverManager
-import java.util.Date
 
 object ItemDataProcessJob {
 
@@ -140,7 +139,6 @@ object ItemDataProcessJob {
         statement.executeUpdate()
       })
     })
-
     // 6.启动任务等待结束
     ssc.start()
     ssc.awaitTermination()
