@@ -1,11 +1,8 @@
-package mwangli.online.datademo;
+package mwang.online;
 
-import mwangli.online.utils.DateUtils;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.scheduling.annotation.EnableScheduling;
-
-import java.util.Date;
 
 @EnableScheduling
 @SpringBootApplication

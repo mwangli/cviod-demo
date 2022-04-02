@@ -1,6 +1,5 @@
-package mwangli.online.test;
+package mwang.online.test;
 
-import lombok.SneakyThrows;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;

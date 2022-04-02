@@ -1,28 +1,23 @@
-package mwangli.online.datademo.crawler;
+package mwang.online.crawler;
 
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import mwangli.online.datademo.bean.CovidDTO;
-import mwangli.online.utils.DateUtils;
-import mwangli.online.utils.HttpUtils;
+import mwang.online.utils.HttpUtils;
+import mwang.online.bean.CovidDTO;
+import mwang.online.utils.DateUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
-import org.jsoup.select.Elements;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import javax.annotation.Resource;
 import java.util.Comparator;
 import java.util.List;
 import java.util.regex.Matcher;

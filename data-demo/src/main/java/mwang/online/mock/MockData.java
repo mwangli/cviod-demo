@@ -1,7 +1,7 @@
-package mwangli.online.datademo.mock;
+package mwang.online.mock;
 
 import com.alibaba.fastjson.JSON;
-import mwangli.online.datademo.bean.ItemDTO;
+import mwang.online.bean.ItemDTO;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;

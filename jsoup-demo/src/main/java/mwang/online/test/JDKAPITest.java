@@ -1,4 +1,4 @@
-package mwangli.online.test;
+package mwang.online.test;
 
 import org.junit.Test;
 

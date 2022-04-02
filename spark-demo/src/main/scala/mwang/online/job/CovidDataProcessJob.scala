@@ -2,8 +2,7 @@ package mwang.online.job
 
 import com.alibaba.fastjson.JSON
 import mwang.online.bean.CovidDTO
-import mwang.online.utils.BaseJdbcSink
-import mwangli.online.utils.DateUtils
+import mwang.online.utils.{BaseJdbcSink, DateUtils}
 import org.apache.spark.sql.streaming.Trigger
 import org.apache.spark.{SparkConf, SparkContext}
 import org.apache.spark.sql.{DataFrame, Dataset, ForeachWriter, Row, SparkSession}

@@ -1,4 +1,4 @@
-package mwangli.online.utils;
+package mwang.online.utils;
 
 import lombok.SneakyThrows;
 import org.apache.commons.lang3.time.FastDateFormat;

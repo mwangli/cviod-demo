@@ -1,11 +1,9 @@
 package mwang.online.controller;
 
 import com.alibaba.fastjson.JSONObject;
-import mwang.online.bean.DataViewVO;
 import mwang.online.mapper.DataViewMapper;
-import mwangli.online.datademo.bean.CovidDTO;
-import mwangli.online.utils.DateUtils;
-import org.springframework.beans.factory.annotation.Autowired;
+import mwang.online.bean.CovidDTO;
+import mwang.online.utils.DateUtils;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;

@@ -1,4 +1,4 @@
-package mwangli.online.datademo;
+package mwang.online;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

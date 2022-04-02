@@ -7,8 +7,7 @@ package mwang.online.job
  */
 
 import com.alibaba.fastjson.JSON
-import mwang.online.utils.OffsetUtils
-import mwangli.online.utils.DateUtils
+import mwang.online.utils.{DateUtils, OffsetUtils}
 import org.apache.kafka.clients.consumer.ConsumerRecord
 import org.apache.kafka.common.TopicPartition
 import org.apache.kafka.common.serialization.StringDeserializer
@@ -30,7 +29,7 @@ object ItemDataProcessJob {
     val sc = new SparkContext(conf)
     sc.setLogLevel("WARN")
     val ssc = new StreamingContext(sc, Seconds(10))
-    ssc.checkpoint("D:\\ssc_check_point")
+    ssc.checkpoint("./ssc_check_point")
     val groupId = "sparkKafka"
     val topic = "item_data"
     // 2.Kafka配置

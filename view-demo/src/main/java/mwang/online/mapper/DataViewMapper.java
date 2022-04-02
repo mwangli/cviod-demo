@@ -1,13 +1,11 @@
 package mwang.online.mapper;
 
-import mwang.online.bean.DataViewVO;
-import mwangli.online.datademo.bean.CovidDTO;
+import mwang.online.bean.CovidDTO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 /**
  * @author mwangli

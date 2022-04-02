@@ -1,11 +1,9 @@
-package mwangli.online.datademo.bean;
+package mwang.online.bean;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
-
-import java.util.List;
 
 /**
  * @author mwangli
