@@ -14,19 +14,19 @@ import java.util.Map;
 @Mapper
 public interface DataViewMapper {
 
-    @Select("select * from t_result1 where dateId = DATE_FORMAT(NOW(),'%Y%m%d')")
+    @Select("select * from t_result1 where dateId = (SELECT DISTINCT dateId FROM t_result3 ORDER BY dateId DESC LIMIT 1))")
     List<CovidDTO> getData1();
 
-    @Select("select * from t_result2 where dateId = DATE_FORMAT(NOW(),'%Y%m%d')")
+    @Select("select * from t_result2 where dateId = (SELECT DISTINCT dateId FROM t_result3 ORDER BY dateId DESC LIMIT 1)")
     List<CovidDTO> getData2();
 
     @Select("select * from t_result3 order by dateId")
     List<CovidDTO> getData3();
 
-    @Select("select * from t_result4 where dateId = DATE_FORMAT(NOW(),'%Y%m%d') order by confirmedCount desc limit 10")
+    @Select("select * from t_result4 where dateId = (SELECT DISTINCT dateId FROM t_result3 ORDER BY dateId DESC LIMIT 1) limit 10")
     List<CovidDTO> getData4();
 
-    @Select("select * from t_result5 where dateId = DATE_FORMAT(NOW(),'%Y%m%d')")
+    @Select("select * from t_result5 where dateId = (SELECT DISTINCT dateId FROM t_result3 ORDER BY dateId DESC LIMIT 1)")
     List<CovidDTO> getData5();
 
     @Select("select * from t_result6")

@@ -32,7 +32,7 @@
         // 填入数据
         mycChart1.setOption({
             title: {  //标题样式
-                text: '今日各省份当前确诊人数地图展示'
+                text: `今日(${data[0].dateId})各省份当前确诊人数地图展示`
             },
             tooltip: {  //这里设置提示框
                 trigger: 'item',  //数据项图形触发
@@ -86,7 +86,7 @@
         // 填入数据
         myChart2.setOption({
             title: {
-                text: '今日各省份累计数据(除香港)'
+                text: `今日(${data[0].dateId})各省份累计数据(除香港)`
             },
             legend: {},
             tooltip: {},
@@ -181,7 +181,7 @@
         // 填入数据
         myChart4.setOption({
             title: {
-                text: '境外输入累计确诊Top10'
+                text: `今日(${data[0].dateId})境外输入累计确诊Top10`
             },
             tooltip: {
                 trigger: 'item'
@@ -228,7 +228,7 @@
         // 填入数据
         myChart5.setOption({
             title: {
-                text: '今日浙江省各城市数据'
+                text: `今日(${data.dateId})浙江省各城市数据`
             },
             tooltip: {
                 trigger: 'axis',
@@ -288,7 +288,7 @@
         // 填入数据
         myChart6.setOption({
             title: {
-                text: '防疫物资实时数据展示(10s)'
+                text: `防疫物资实时数据展示(${data[0].updateTime})`
             },
             legend: {},
             tooltip: {},

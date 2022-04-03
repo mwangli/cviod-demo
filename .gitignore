@@ -34,3 +34,5 @@ build/
 *.crc
 part**
 _part**
+ssc_check_point/**
+log*

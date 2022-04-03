@@ -38,7 +38,7 @@ public class CovidCrawler {
     private KafkaTemplate<String, String> kafkaTemplate;
 
     @Test
-    @Scheduled(cron = " 0 0 9 * * ?")
+    @Scheduled(cron = " 0 5 0 * * ?")
 //    @Scheduled(initialDelay = 1000, fixedDelay = 1000 * 60 * 60 * 24)
     public void crawlCovidData() {
         // 1.请求指定页面
@@ -76,17 +76,17 @@ public class CovidCrawler {
             }
             province.setCities(null);
             // 6.获取省份的历史数据,只取30条
-            String dataUrl = province.getStatisticsData();
-            String data = HttpUtils.getHtml(dataUrl);
-            JSONObject jsonObject = JSON.parseObject(data);
-            String dataStr = jsonObject.getString("data");
-            List<CovidDTO> dataList = JSON.parseArray(dataStr, CovidDTO.class);
-            Stream<CovidDTO> limitList = dataList.stream().sorted(Comparator.comparing(CovidDTO::getDateId).reversed()).limit(30);
-            limitList.forEach(o -> {
-                o.setLocationId(province.getLocationId());
-                o.setProvinceShortName(province.getProvinceShortName());
-                kafkaTemplate.send("city_data", JSON.toJSONString(o));
-            });
+//            String dataUrl = province.getStatisticsData();
+//            String data = HttpUtils.getHtml(dataUrl);
+//            JSONObject jsonObject = JSON.parseObject(data);
+//            String dataStr = jsonObject.getString("data");
+//            List<CovidDTO> dataList = JSON.parseArray(dataStr, CovidDTO.class);
+//            Stream<CovidDTO> limitList = dataList.stream().sorted(Comparator.comparing(CovidDTO::getDateId).reversed());
+//            limitList.forEach(o -> {
+//                o.setLocationId(province.getLocationId());
+//                o.setProvinceShortName(province.getProvinceShortName());
+//                kafkaTemplate.send("city_data", JSON.toJSONString(o));
+//            });
             // 将省份数据发送到Kafka
             kafkaTemplate.send("city_data", JSON.toJSONString(province));
         });

@@ -31,6 +31,7 @@ public class DataViewController {
             JSONObject res = new JSONObject();
             res.put("name", o.getProvinceShortName());
             res.put("value", o.getCurrentConfirmedCount());
+            res.put("dateId", o.getDateId());
             return res;
         }).collect(Collectors.toList());
     }
@@ -47,6 +48,7 @@ public class DataViewController {
                     result.put("疑似病例人数", o.getSuspectedCount());
                     result.put("累计治愈人数", o.getCuredCount());
                     result.put("累计死亡人数", o.getDeadCount());
+                    result.put("dateId", o.getDateId());
                     return result;
                 }).collect(Collectors.toList());
     }
@@ -80,6 +82,7 @@ public class DataViewController {
             JSONObject res = new JSONObject();
             res.put("value", o.getConfirmedCount());
             res.put("name", o.getProvinceShortName());
+            res.put("dateId", o.getDateId());
             return res;
         }).collect(Collectors.toList());
     }
@@ -101,6 +104,7 @@ public class DataViewController {
         result.put("curedCountData", curedCountData);
         List<Integer> deadCountData = data.stream().map(CovidDTO::getDeadCount).collect(Collectors.toList());
         result.put("deadCountData", deadCountData);
+        result.put("dateId", data.stream().findFirst().orElse(new CovidDTO()).getDateId());
         return result;
     }
 
@@ -117,6 +121,7 @@ public class DataViewController {
                     result.put("消耗", o.get("xh"));
                     result.put("需求", o.get("xq"));
                     result.put("库存", o.get("kc"));
+                    result.put("updateTime", o.get("updateTime"));
                     return result;
                 }).collect(Collectors.toList());
     }
@@ -126,6 +131,7 @@ public class DataViewController {
         Date date = DateUtils.parse(dateId, "yyyyMMdd");
         Date now = new Date();
         Date pre30Date = DateUtils.getNextDate(now, -30);
+        assert date != null;
         return date.getTime() >= pre30Date.getTime() && date.getTime() <= now.getTime();
     }
 }
