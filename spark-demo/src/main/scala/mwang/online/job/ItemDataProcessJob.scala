@@ -24,6 +24,7 @@ object ItemDataProcessJob {
     // 1.准备环境
     val conf = new SparkConf()
       .setAppName("ItemDataProcess")
+      .setMaster("local[*]")
     val sc = new SparkContext(conf)
     sc.setLogLevel("WARN")
     val ssc = new StreamingContext(sc, Seconds(10))

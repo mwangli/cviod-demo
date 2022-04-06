@@ -12,6 +12,7 @@ object CovidDataProcessJob {
   def main(args: Array[String]): Unit = {
     // 0.创建StructStreaming环境
     val sparkSession: SparkSession = SparkSession.builder()
+      .master("local[*]")
       .appName("CovidDataProcess").getOrCreate()
     val sc: SparkContext = sparkSession.sparkContext
     sc.setLogLevel("WARN")
