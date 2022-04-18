@@ -66,7 +66,7 @@ object CovidDataProcessJob {
       .agg(sum(Symbol("confirmedCount")) as "confirmedCount")
       .sort(Symbol("confirmedCount").desc)
     // 当日杭州数据
-    val result5 = cityDS.filter(_.provinceShortName == "浙江")
+    val result5 = cityDS.filter(city => city.provinceShortName == "浙江" && !city.cityName.contains("待明确"))
       .select(Symbol("dateId"),
         Symbol("provinceShortName"),
         Symbol("cityName"),
