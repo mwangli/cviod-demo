@@ -38,11 +38,9 @@ public class MockData {
             ItemDTO itemDTO = new ItemDTO();
             itemDTO.setName(itemName[random.nextInt(itemName.length)]);
             itemDTO.setFrom(itemFrom[random.nextInt(itemFrom.length)]);
-            itemDTO.setCount(random.nextInt(1000) - 400);
+            itemDTO.setCount( random.nextInt(100)-50);
             // 2.将数据发送至Kafka
             kafkaTemplate.send("item_data", JSON.toJSONString(itemDTO));
         }
     }
-
-
 }
