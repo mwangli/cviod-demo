@@ -23,7 +23,7 @@ public interface DataViewMapper {
     @Select("select * from t_result3 order by dateId")
     List<CovidDTO> getData3();
 
-    @Select("select * from t_result4 where dateId = (SELECT DISTINCT dateId FROM t_result3 ORDER BY dateId DESC LIMIT 1) limit 10")
+    @Select("select * from t_result4 where dateId = (SELECT DISTINCT dateId FROM t_result3 ORDER BY dateId DESC LIMIT 1) order by confirmedCount desc limit 10")
     List<CovidDTO> getData4();
 
     @Select("select * from t_result5 where dateId = (SELECT DISTINCT dateId FROM t_result3 ORDER BY dateId DESC LIMIT 1)")
