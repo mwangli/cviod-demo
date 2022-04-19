@@ -34,11 +34,11 @@ public class MockData {
     public void mock() {
         // 1.模拟生成物资数据
         Random random = new Random();
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 30; i++) {
             ItemDTO itemDTO = new ItemDTO();
             itemDTO.setName(itemName[random.nextInt(itemName.length)]);
             itemDTO.setFrom(itemFrom[random.nextInt(itemFrom.length)]);
-            itemDTO.setCount(random.nextInt(10) - 5);
+            itemDTO.setCount(random.nextInt(1000) - 400);
             // 2.将数据发送至Kafka
             kafkaTemplate.send("item_data", JSON.toJSONString(itemDTO));
         }
