@@ -55,7 +55,7 @@ object CovidDataProcessJob {
         Symbol("deadCount"))
     // 历史全国汇总数据
     val result3 = provinceDS.groupBy(Symbol("dateId"))
-      .agg(sum(Symbol("confirmedIncr")) as "confirmedIncr",
+      .agg(sum(Symbol("currentConfirmedCount")) as "currentConfirmedCount",
         sum(Symbol("confirmedCount")) as "confirmedCount",
         sum(Symbol("suspectedCount")) as "suspectedCount",
         sum(Symbol("curedCount")) as "curedCount",

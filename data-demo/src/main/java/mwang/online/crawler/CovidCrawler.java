@@ -89,6 +89,7 @@ public class CovidCrawler {
 //            });
             // 将省份数据发送到Kafka
             kafkaTemplate.send("city_data", JSON.toJSONString(province));
+            System.out.println(JSON.toJSONString(province));
         });
     }
 }

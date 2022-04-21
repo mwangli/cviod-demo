@@ -61,8 +61,8 @@ public class DataViewController {
         List<CovidDTO> filterList = data3.stream().filter(this::in30Days).collect(Collectors.toList());
         List<String> dateIdList = filterList.stream().map(CovidDTO::getDateId).collect(Collectors.toList());
         result.put("dateIdList", dateIdList);
-        List<Integer> confirmedIncrData = filterList.stream().map(CovidDTO::getConfirmedIncr).collect(Collectors.toList());
-        result.put("confirmedIncrData", confirmedIncrData);
+        List<Integer> currentConfirmedCountData = filterList.stream().map(CovidDTO::getCurrentConfirmedCount).collect(Collectors.toList());
+        result.put("currentConfirmedCountData", currentConfirmedCountData);
         List<Integer> confirmedCountData = filterList.stream().map(CovidDTO::getConfirmedCount).collect(Collectors.toList());
         result.put("confirmedCountData", confirmedCountData);
         List<Integer> suspectedCountData = filterList.stream().map(CovidDTO::getSuspectedCount).collect(Collectors.toList());
