@@ -13,7 +13,7 @@ object CovidDataProcessJob {
     // 0.创建StructStreaming环境
     val sparkSession: SparkSession = SparkSession.builder()
       .config("spark.testing.memory","2147480000")
-      .master("local[*]")
+//      .master("local[*]")
       .appName("CovidDataProcess").getOrCreate()
     val sc: SparkContext = sparkSession.sparkContext
     sc.setLogLevel("WARN")
@@ -160,3 +160,4 @@ object CovidDataProcessJob {
       }).start().awaitTermination()
   }
 }
+
